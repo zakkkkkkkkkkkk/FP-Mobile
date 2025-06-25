@@ -1,95 +1,189 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fp_pemrograman/colors.dart';
-import 'package:fp_pemrograman/screens/nearbyscreen.dart'; // Import NearbyScreen yang baru
+import 'package:fp_pemrograman/screens/article1_screen.dart'; // Import artikel 1
+import 'package:fp_pemrograman/screens/article2_screen.dart'; // Import artikel 2
+import 'package:fp_pemrograman/screens/nearbyscreen.dart';
 import 'package:fp_pemrograman/screens/profile_screen.dart';
+import 'package:fp_pemrograman/screens/historyscreen.dart';
 import 'package:fp_pemrograman/screens/scan_screen.dart';
 
-
-// Widget untuk konten utama halaman Home
+// Widget for the main content of the Home page
 class HomePageContent extends StatelessWidget {
   const HomePageContent({super.key});
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final String displayName = user?.displayName?.isNotEmpty == true ? user!.displayName! : 'User';
+    final String displayName =
+        user?.displayName?.isNotEmpty == true ? user!.displayName! : 'User';
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/logo.png',
-                  width: 40,
-                  height: 40,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'DermAI',
-                  style: GoogleFonts.poppins(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF093648),
-                  ),
-                ),
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+          24.0, 20.0, 24.0, 120.0), // Padding bawah untuk nav bar
+      children: [
+        const SizedBox(height: 40), // Spasi dari atas
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.secondaryTeal,
+                AppColors.darkTeal.withOpacity(0.8)
               ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            const SizedBox(height: 30),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.secondaryTeal, AppColors.darkTeal.withOpacity(0.8)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.darkTeal.withOpacity(0.3),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
+              )
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Welcome back,',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.white.withOpacity(0.9),
                 ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.darkTeal.withOpacity(0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
-                  )
-                ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome back,',
-                    style: GoogleFonts.poppins(
-                      fontSize: 20,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    displayName,
-                    style: GoogleFonts.poppins(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 4),
+              Text(
+                displayName,
+                style: GoogleFonts.poppins(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+        Text(
+          "How's your skin",
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryOrange,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 5,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ScanHistoryScreen()),
+              );
+            },
+            icon: const Icon(Icons.history, color: Colors.white),
+            label: Text(
+              'Scan History',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 30),
-            Text(
-              "Let's check your skin",
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 30),
+        Text(
+          "Tips & Articles",
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildArticleCard(
+          title: "Cara Mengatasi Eksim",
+          icon: Icons.article_outlined, // Menggunakan ikon
+          onTap: () {
+            // Navigasi ke Article1Screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Article1Screen()),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildArticleCard(
+          title: "Makanan Baik untuk Penderita Eksim",
+          icon: Icons.restaurant_menu_outlined, // Menggunakan ikon
+          onTap: () {
+            // Navigasi ke Article2Screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Article2Screen()),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  // Widget untuk membuat kartu artikel
+  Widget _buildArticleCard({
+    required String title,
+    required VoidCallback onTap,
+    IconData? icon,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.backgroundLightest,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 1,
+              blurRadius: 10,
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.backgroundLighter,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, size: 40, color: AppColors.darkTeal),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.darkTeal,
+                ),
               ),
             ),
           ],
@@ -99,6 +193,7 @@ class HomePageContent extends StatelessWidget {
   }
 }
 
+// Widget utama untuk HomeScreen
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -109,12 +204,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // --- PERUBAHAN DI SINI ---
-  // Ganti PlacesPage dengan NearbyScreen
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePageContent(),
-    const ScanScreen(), 
-    const NearbyScreen(), // Menggunakan NearbyScreen yang sudah kita perbaiki
+    const ScanScreen(),
+    const NearbyScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -135,12 +228,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 32,
+              height: 32,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'DermAI',
+              style: GoogleFonts.poppins(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF093648),
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.person_outline, color: Color(0xFF093648), size: 30),
+            icon: const Icon(Icons.person_outline,
+                color: Color(0xFF093648), size: 30),
             onPressed: () {
               Navigator.push(
                 context,
@@ -165,7 +276,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Stack(
           children: [
-            SafeArea(child: _widgetOptions.elementAt(_selectedIndex)),
+            IndexedStack(
+              index: _selectedIndex,
+              children: [
+                SafeArea(child: _widgetOptions[0]),
+                _widgetOptions[1],
+                _widgetOptions[2],
+              ],
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: _buildCustomNavBar(),
@@ -176,6 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Widget untuk bilah navigasi bawah kustom
   Widget _buildCustomNavBar() {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -202,6 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Widget untuk item navigasi
   Widget _buildNavItem(IconData icon, String label, int index) {
     final bool isSelected = _selectedIndex == index;
     return GestureDetector(
@@ -220,7 +340,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style: GoogleFonts.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: isSelected ? AppColors.primaryOrange : Colors.grey.shade500,
+              color:
+                  isSelected ? AppColors.primaryOrange : Colors.grey.shade500,
             ),
           )
         ],
@@ -228,6 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Widget untuk tombol pindai
   Widget _buildScanButton() {
     return GestureDetector(
       onTap: () => _onItemTapped(1),

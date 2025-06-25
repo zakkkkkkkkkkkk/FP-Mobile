@@ -15,9 +15,7 @@ dependencies:
   firebase_core: ^2.32.0
   firebase_auth: ^4.19.0
   firebase_storage: ^11.7.0
-
-  # UI & Functionality
-  google_fonts: ^6.1.0
+  cloud_firestore: ^4.13.6 
   image_picker: ^1.1.2 # Version updated and duplicate removed
   geolocator: ^10.1.0
   http: ^1.2.0
@@ -32,9 +30,10 @@ dependencies:
     git:
       url: https://github.com/zakkkkkkkkkkkk/flutter-tflite.git
       ref: main # Use the main branch of the forked repository
-
+  intl: ^0.19.0
   # Note: google_sign_in is not used in our current flow but left here for now.
   google_sign_in: ^6.3.0
+  google_fonts: ^6.1.0
 
   cupertino_icons: ^1.0.8
   mapbox_maps_flutter: ^2.9.0
