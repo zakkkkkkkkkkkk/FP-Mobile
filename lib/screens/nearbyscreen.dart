@@ -70,7 +70,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
 
   Future<void> _searchDermatologists(double lat, double lng) async {
     final url =
-        'https://api.mapbox.com/geocoding/v5/mapbox.places/rumah%20sakit.json'
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/sate%20kambing.json'
         '?proximity=$lng,$lat'
         '&types=poi'
         '&limit=15'
